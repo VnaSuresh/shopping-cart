@@ -1,0 +1,13 @@
+<p>product-list works!</p>
+
+<div fxLayout="row wrap">
+  <ng-container *ngFor="let product of products">
+    <div fxFlex="16.66" fxFlex.sm="33.33" fxFlex.xs="50" fxLayout="column" fxLayoutAlign="space-between">
+      
+        <p>{{product.name}}</p>
+        <img src="{{product.image}}">
+        <p>{{product.price | number: '1.2-2'}}</p>
+ 
+    </div>
+  </ng-container>
+</div>
