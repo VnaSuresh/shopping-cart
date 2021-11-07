@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -9,20 +10,31 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ProductDetailsComponent implements OnInit {
 
   public product_id = '';
+  public dialogView = false;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    @Optional() public dialogRef: MatDialogRef<ProductDetailsComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: string
   ) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      this.product_id = params['id'];
+      if (params['id']) {
+        this.product_id = params['id'];
+      } else {
+        this.dialogView = true;
+      }
     });
   }
 
   close() {
-    this.router.navigate(['/list']);
+    if (this. dialogView) {
+      this.dialogRef.close();
+    } else {
+      this.router.navigate(['/list']);
+    }
   }
 
 }

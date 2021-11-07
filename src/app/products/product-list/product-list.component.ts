@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 
 import { Product } from '../models/product';
-import { ProductDetailsDialogComponent } from '../product-details-dialog/product-details-dialog.component';
+import { ProductDetailsComponent } from '../product-details/product-details.component';
 import { ProductService } from '../services/product.service';
 
 @Component({
@@ -80,7 +80,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   openDetailsDialog(product_id: string) {
-    this.matDialog.open(ProductDetailsDialogComponent, {
+    this.matDialog.open(ProductDetailsComponent, {
       data: product_id,
       width: '500px',
       autoFocus: false

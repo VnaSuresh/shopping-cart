@@ -13,8 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ProductsRoutingModule } from './products-routing.module';
 import { ProductListComponent } from './product-list/product-list.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
-import { ProductDetailsDialogComponent } from './product-details-dialog/product-details-dialog.component';
-import { ProductComponent } from './product/product.component';
+import { ProductComponent } from './product-details/product/product.component';
 
 const materialModules = [
   MatButtonModule,
@@ -30,7 +29,6 @@ const materialModules = [
   declarations: [
     ProductListComponent,
     ProductDetailsComponent,
-    ProductDetailsDialogComponent,
     ProductComponent
   ],
   imports: [
@@ -42,7 +40,7 @@ const materialModules = [
     ProductsRoutingModule
   ],
   entryComponents: [
-    ProductDetailsDialogComponent
+    ProductDetailsComponent
   ]
 })
 export class ProductsModule { }
