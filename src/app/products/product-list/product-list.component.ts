@@ -42,6 +42,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getProducts();
+    // filter the list of products based on value of search input
     this.searchText.valueChanges
       .pipe(
         debounceTime(500),
@@ -71,6 +72,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       });
   }
 
+  // choose mode of display(dialog/page view) based on screen size
   displayProductDetails(product_id: string) {
     if (this.isSmallScreen) {
       this.router.navigate([`/list/${product_id}`]);
@@ -87,6 +89,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     });
   }
 
+  // emit value from destroyed to close subscriptions
   ngOnDestroy() {
     this.destroyed.next();
     this.destroyed.complete();

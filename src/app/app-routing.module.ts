@@ -10,7 +10,11 @@ const routes: Routes = [
   {
     path: 'list',
     loadChildren: () => import('./products/products.module').then(m => m.ProductsModule)
-  }
+  },
+  {
+    path: '**',
+    redirectTo: 'list'
+  },
 ];
 
 @NgModule({

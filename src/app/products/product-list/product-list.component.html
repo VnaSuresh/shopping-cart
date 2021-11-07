@@ -1,3 +1,4 @@
+<!-- Filter section -->
 <div fxLayout="row">
   <mat-form-field fxFlex="50" fxFlex.sm="100" fxFlex.xs="100" class="margin-10">
     <mat-label>Search</mat-label>
@@ -5,15 +6,19 @@
     <input type="text" matInput [formControl]="searchText">
   </mat-form-field>
 </div>
+
+<!-- Spinner -->
 <div fxLayout="row" fxLayoutAlign="center" class="margin-20" *ngIf="displayLoader; else show_products">
   <mat-spinner></mat-spinner>
 </div>
+
+<!-- Product list -->
 <ng-template #show_products>
   <div fxLayout="row wrap" *ngIf="!displayLoader && filteredProducts.length; else no_records">
     <ng-container *ngFor="let product of filteredProducts">
       <div fxFlex="16.66" fxFlex.sm="33.33" fxFlex.xs="50" fxLayout=" stretch">
-        <mat-card fxLayout="column" fxLayoutGap="2px" fxLayoutAlign="space-between center" class="margin-10 cursor-pointer"
-          (click)="displayProductDetails(product.product_id)">
+        <mat-card fxLayout="column" fxLayoutGap="2px" fxLayoutAlign="space-between center"
+          class="margin-10 cursor-pointer" (click)="displayProductDetails(product.product_id)">
           <b>{{product.name}}</b>
           <img src="{{product.image}}" class="product-img">
           <div>
@@ -25,6 +30,8 @@
     </ng-container>
   </div>
 </ng-template>
+
+<!-- No results message -->
 <ng-template #no_records>
   <p class="margin-20">No matching products!</p>
 </ng-template>

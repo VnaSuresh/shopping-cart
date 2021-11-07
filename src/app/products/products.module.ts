@@ -15,6 +15,7 @@ import { ProductListComponent } from './product-list/product-list.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
 import { ProductComponent } from './product-details/product/product.component';
 
+/* imports for angular material modules */
 const materialModules = [
   MatButtonModule,
   MatCardModule,

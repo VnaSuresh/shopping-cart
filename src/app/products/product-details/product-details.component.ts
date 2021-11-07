@@ -19,6 +19,7 @@ export class ProductDetailsComponent implements OnInit {
     @Optional() @Inject(MAT_DIALOG_DATA) public data: string
   ) { }
 
+  // set dialogView to true if route does not have param
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       if (params['id']) {
@@ -29,6 +30,7 @@ export class ProductDetailsComponent implements OnInit {
     });
   }
 
+  // return to list view based on screen size
   close() {
     if (this. dialogView) {
       this.dialogRef.close();

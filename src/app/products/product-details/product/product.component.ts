@@ -53,6 +53,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.closeDetails.emit();
   }
 
+  // emit value from destroyed to close subscriptions
   ngOnDestroy() {
     this.destroyed.next();
     this.destroyed.complete();
