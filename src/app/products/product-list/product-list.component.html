@@ -1,13 +1,30 @@
-<p>product-list works!</p>
-
-<div fxLayout="row wrap">
-  <ng-container *ngFor="let product of products">
-    <div fxFlex="16.66" fxFlex.sm="33.33" fxFlex.xs="50" fxLayout="column" fxLayoutAlign="space-between">
-      
-        <p>{{product.name}}</p>
-        <img src="{{product.image}}">
-        <p>{{product.price | number: '1.2-2'}}</p>
- 
-    </div>
-  </ng-container>
+<div fxLayout="row">
+  <mat-form-field fxFlex="50" fxFlex.sm="100" fxFlex.xs="100" class="margin-10">
+    <mat-label>Search</mat-label>
+    <mat-icon matPrefix>search</mat-icon>
+    <input type="text" matInput [formControl]="searchText">
+  </mat-form-field>
 </div>
+<div fxLayout="row" fxLayoutAlign="center" class="margin-20" *ngIf="displayLoader; else show_products">
+  <mat-spinner></mat-spinner>
+</div>
+<ng-template #show_products>
+  <div fxLayout="row wrap" *ngIf="!displayLoader && filteredProducts.length; else no_records">
+    <ng-container *ngFor="let product of filteredProducts">
+      <div fxFlex="16.66" fxFlex.sm="33.33" fxFlex.xs="50" fxLayout=" stretch">
+        <mat-card fxLayout="column" fxLayoutGap="2px" fxLayoutAlign="space-between center" class="margin-10 cursor-pointer"
+          (click)="displayProductDetails(product.product_id)">
+          <b>{{product.name}}</b>
+          <img src="{{product.image}}" class="product-img">
+          <div>
+            <span class="mat-body-1">Price: </span>
+            <b>{{product.price | number: '1.2-2'}}</b>
+          </div>
+        </mat-card>
+      </div>
+    </ng-container>
+  </div>
+</ng-template>
+<ng-template #no_records>
+  <p class="margin-20">No matching products!</p>
+</ng-template>

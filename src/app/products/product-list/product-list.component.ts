@@ -1,7 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
+
 import { Product } from '../models/product';
-import { ProductList } from '../models/product-list';
+import { ProductDetailsDialogComponent } from '../product-details-dialog/product-details-dialog.component';
 import { ProductService } from '../services/product.service';
 
 @Component({
@@ -9,20 +14,82 @@ import { ProductService } from '../services/product.service';
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss']
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent implements OnInit, OnDestroy {
 
-  public products: Array<Product> = [];
+  private products: Array<Product> = [];
+  public filteredProducts: Array<Product> = [];
+  public searchText = new FormControl('');
+  public displayLoader = false;
+  public isSmallScreen = false;
+  private destroyed = new Subject<void>();
 
-  constructor(private productService: ProductService) { }
+  constructor(
+    private productService: ProductService,
+    private matDialog: MatDialog,
+    private breakpointObserver: BreakpointObserver,
+    private router: Router
+  ) {
+    breakpointObserver
+      .observe([
+        Breakpoints.XSmall,
+        Breakpoints.Small
+      ])
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(result => {
+        this.isSmallScreen = result.matches;
+      });
+  }
 
   ngOnInit(): void {
     this.getProducts();
+    this.searchText.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        takeUntil(this.destroyed)
+      )
+      .subscribe(value => {
+        this.filteredProducts = value ?
+          this.products.filter(product => product.name.toLowerCase().indexOf(value.toLowerCase()) > -1) :
+          this.products;
+      });
   }
 
   getProducts() {
-    this.productService.fetchProducts().subscribe(response => {
-      this.products = response.products;
+    this.displayLoader = true;
+    this.productService.fetchProducts()
+      .pipe(takeUntil(this.destroyed))
+      .subscribe({
+        next: (response) => {
+          this.products = response.products;
+          this.filteredProducts = this.products;
+          this.displayLoader = false;
+        },
+        error: () => {
+          this.displayLoader = false;
+        }
+      });
+  }
+
+  displayProductDetails(product_id: string) {
+    if (this.isSmallScreen) {
+      this.router.navigate([`/list/${product_id}`]);
+    } else {
+      this.openDetailsDialog(product_id);
+    }
+  }
+
+  openDetailsDialog(product_id: string) {
+    this.matDialog.open(ProductDetailsDialogComponent, {
+      data: product_id,
+      width: '500px',
+      autoFocus: false
     });
+  }
+
+  ngOnDestroy() {
+    this.destroyed.next();
+    this.destroyed.complete();
   }
 
 }

@@ -1,0 +1,28 @@
+<mat-card class="mat-elevation-z0">
+  <ng-container *ngIf="!invalidProduct && !displayLoader; else no_products">
+    <mat-card-header>
+      <mat-card-title>{{data.name}}</mat-card-title>
+      <mat-card-subtitle>
+        <span>Price: </span>
+        <b class="price">{{data.price | number: '1.2-2'}}</b>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div fxLayout="row" fxLayoutAlign="center">
+        <img src="{{data.image}}" alt="Photo of {{data.name}}" class="product-img margin-10">
+      </div>
+      <p class="margin-10"> {{data.description}} </p>
+    </mat-card-content>
+  </ng-container>
+  <mat-card-actions align="end" class="margin-10">
+    <button mat-raised-button (click)="close()">BACK</button>
+  </mat-card-actions>
+</mat-card>
+<ng-template #no_products>
+  <div fxLayout="row" fxLayoutAlign="center center" class="margin-20" *ngIf="invalidProduct">
+    <p>Product not found!</p>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="center" class="margin-20" *ngIf="displayLoader">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>
